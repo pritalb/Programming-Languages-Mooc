@@ -144,6 +144,19 @@ You should return an int n such that the first n elements of the list add to les
 n + 1 elements of the list add to sum or more. Assume the entire list sums to more than the passed in
 value; it is okay for an exception to occur if this is not the case. *)
 (* val number_before_reaching_sum = fn : int * int list -> int *)
+fun nbrs_helper(sum: int, int_list: int list, index_counter: int, current_sum: int) =
+	let
+		val new_sum = current_sum + hd int_list
+	in
+		if new_sum = sum orelse new_sum > sum
+		then
+			index_counter
+		else
+			nbrs_helper(sum, tl int_list, index_counter + 1, new_sum)
+	end
+
+fun number_before_reaching_sum(sum: int, int_list: int list) =
+	nbrs_helper(sum, int_list, 0, 0)
 
 
 (* Write a function what_month that takes a day of year (i.e., an int between 1 and 365) and returns
