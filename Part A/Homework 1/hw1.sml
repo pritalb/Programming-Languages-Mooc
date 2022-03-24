@@ -163,6 +163,19 @@ fun number_before_reaching_sum(sum: int, int_list: int list) =
 what month that day is in (1 for January, 2 for February, etc.). Use a list holding 12 integers and your
 answer to the previous problem. *)
 (* val what_month = fn : int -> int *)
+fun smallest_element_greater_than(int_list: int list, n: int, index_counter: int) =
+	if n <= hd int_list
+	then
+		index_counter
+	else
+		smallest_element_greater_than(tl int_list, n, index_counter + 1)
+
+fun what_month(day: int) =
+	let
+		val days_upto_a_month = [30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 365]
+	in
+		smallest_element_greater_than(days_upto_a_month, day, 1)
+	end
 
 (* Write a function month_range that takes two days of the year day1 and day2 and returns an int list
 [m1,m2,...,mn] where m1 is the month of day1, m2 is the month of day1+1, ..., and mn is the month
