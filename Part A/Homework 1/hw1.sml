@@ -172,7 +172,7 @@ fun smallest_element_greater_than(int_list: int list, n: int, index_counter: int
 
 fun what_month(day: int) =
 	let
-		val days_upto_a_month = [30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 365]
+		val days_upto_a_month = [31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
 	in
 		smallest_element_greater_than(days_upto_a_month, day, 1)
 	end
@@ -181,8 +181,55 @@ fun what_month(day: int) =
 [m1,m2,...,mn] where m1 is the month of day1, m2 is the month of day1+1, ..., and mn is the month
 of day day2. Note the result will have length day2 - day1 + 1 or length 0 if day1>day2 *)
 (* val month_range = fn : int * int -> int list *)
+fun get_range_list(n1: int, n2: int) =
+	if n1 = n2
+	then
+		[n2]
+	else
+		[n1] @ get_range_list(n1 + 1, n2)
 
+fun month_range(day1: int, day2: int) =
+	if day1 = day2
+	then
+		[what_month(day2)]
+	else
+		[what_month(day1)] @ month_range(day1 + 1, day2)
 
 (* Write a function oldest that takes a list of dates and evaluates to an (int*int*int) option. It
 evaluates to NONE if the list has no dates and SOME d if the date d is the oldest date in the list *)
 (* val oldest = fn : (int * int * int) list -> (int * int * int) option *)
+
+(* convert a list of dates to a list of n where n is a date converted to days *)
+fun date_to_days(date: int*int*int) =
+	#1 date * 365 + #2 date * 31 + #3 date
+
+fun oldest_date(d_list: (int*int*int) list) =
+	let
+		val tail = tl d_list
+		val first = hd d_list
+	in
+		if null tail
+		then
+			first
+		else
+			let
+				val ol = oldest_date(tail)
+			in
+				if date_to_days(first) < date_to_days(ol)
+				then
+					first
+				else
+					ol
+			end
+	end
+
+fun oldest(d_list: (int*int*int) list) =
+	if null d_list
+	then
+		NONE
+	else
+		let
+			val ol = oldest_date(d_list)
+		in
+			SOME ol
+		end
