@@ -16,7 +16,34 @@ fun same_string(s1 : string, s2 : string) =
 	string is not in the list, else return SOME lst where lst is identical to the argument list except the string
 	is not in it. You may assume the string is in the list at most once. Use same_string, provided to you,
 	to compare strings. Sample solution is around 8 lines. *)
+fun string_in_list(str : string, str_list : string list) =
+	case str_list of
+			[] => false
+		|	a::as' => if a = str then true else string_in_list(str, as')
 
+fun remove_str_from_list(str: string, str_list : string list) =
+	case str_list of
+	   [] => []
+	 | a::as' => if a = str 
+	 			 then
+					[] @ remove_str_from_list(str, as')
+				 else
+				 	[a] @ remove_str_from_list(str, as')
+
+fun all_except_option(str : string, str_list : string list) =
+	let
+		val str_in_list = string_in_list(str, str_list)
+	in
+		if str_in_list
+		then
+			let
+				val list_after_removal = remove_str_from_list(str, str_list)
+			in
+				SOME list_after_removal
+			end
+		else
+			NONE
+	end
 
 
 (* (b) Write a function get_substitutions1, which takes a string list list (a list of list of strings, the
