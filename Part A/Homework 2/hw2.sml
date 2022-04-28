@@ -61,7 +61,22 @@ fun all_except_option(str : string, str_list : string list) =
 
 	Use part (a) and ML’s list-append (@) but no other helper functions. Sample solution is around 6 lines. *)
 
-
+fun get_substitutions1 (sl_list : string list list, str : string) =
+	case sl_list of
+	   [] => []
+	 | a::as' => let
+				 	val str_in_list = string_in_list(str, a)
+				 in
+					if str_in_list
+					then
+						let
+							val list_after_removal = remove_str_from_list(str, a)
+						in
+							list_after_removal @ get_substitutions1(as', str)
+						end
+					else
+						[] @ get_substitutions1(as', str)
+				 end
 
 
 (* (c) Write a function get_substitutions2, which is like get_substitutions1 except it uses a tail-recursive
